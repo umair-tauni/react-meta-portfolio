@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import {
   Box,
@@ -18,7 +18,7 @@ import useSubmit from "../hooks/useSubmit";
 import { useAlertContext } from "../context/alertContext";
 
 const LandingSection = () => {
-  const { isLoading, submit } = useSubmit();
+  const { isLoading, response, submit } = useSubmit();
   const { onOpen } = useAlertContext();
 
   const formik = useFormik({
@@ -31,7 +31,11 @@ const LandingSection = () => {
     onSubmit: async (values) => {
       try {
         await submit(values); // Submit form values using the submit function from useSubmit
-        onOpen("Success", "Your message has been sent.");
+        formik.resetForm(); // Reset the form after successful submission
+        onOpen(
+          "Success",
+          `Thank you ${values.firstName}, your message has been sent.`
+        );
       } catch (error) {
         onOpen("Error", "Failed to send your message.");
       }
@@ -49,6 +53,19 @@ const LandingSection = () => {
         .min(10, "Message must be at least 10 characters long"),
     }),
   });
+
+  useEffect(() => {
+    if (response) {
+      if (response.type === "success") {
+        onOpen(
+          "Success",
+          `Thank you ${formik.values.firstName}, your message has been sent.`
+        );
+      } else {
+        onOpen("Error", `Failed to send your message. ${response.message}`);
+      }
+    }
+  }, [response, onOpen, formik.values.firstName]);
 
   return (
     <FullScreenSection
