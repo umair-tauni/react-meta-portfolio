@@ -2,39 +2,39 @@ import React from "react";
 import FullScreenSection from "./FullScreenSection";
 import { Box, Heading } from "@chakra-ui/react";
 import Card from "./Card";
-import photo1 from "../images/photo1.jpg";
-import photo2 from "../images/photo2.jpg";
-import photo3 from "../images/photo3.jpg";
-import photo4 from "../images/photo4.jpg";
+// import photo1 from "../images/photo1.jpg";
+// import photo2 from "../images/photo2.jpg";
+// import photo3 from "../images/photo3.jpg";
+// import photo4 from "../images/photo4.jpg";
 
 const projects = [
   {
     title: "React Space",
     description:
       "Handy tool belt to create amazing AR components in a React app, with redux integration via middleware️",
-    getImageSrc: () => photo1,
-    // getImageSrc: () => require("../images/photo1.jpg"),
+    // getImageSrc: () => photo1,
+    getImageSrc: () => require("../images/photo1.jpg"),
   },
   {
     title: "React Infinite Scroll",
     description:
       "A scrollable bottom sheet with virtualisation support, native animations at 60 FPS and fully implemented in JS land 🔥️",
-    getImageSrc: () => photo2,
-    // getImageSrc: () => require("../images/photo2.jpg"),
+    // getImageSrc: () => photo2,
+    getImageSrc: () => require("../images/photo2.jpg"),
   },
   {
     title: "Photo Gallery",
     description:
       "A One-stop shop for photographers to share and monetize their photos, allowing them to have a second source of income",
-    getImageSrc: () => photo3,
-    // getImageSrc: () => require("../images/photo3.jpg"),
+    // getImageSrc: () => photo3,
+    getImageSrc: () => require("../images/photo3.jpg"),
   },
   {
     title: "Event planner",
     description:
       "A mobile application for leisure seekers to discover unique events and activities in their city with a few taps",
-    getImageSrc: () => photo4,
-    // getImageSrc: () => require("../images/photo4.jpg"),
+    // getImageSrc: () => photo4,
+    getImageSrc: () => require("../images/photo4.jpg"),
   },
 ];
 

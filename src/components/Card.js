@@ -8,7 +8,7 @@ import React from "react";
 // Feel free to import other UI components from Chakra UI if you wish to.
 
 const Card = ({ title, description, imageSrc }) => {
-  console.log("Image source:", imageSrc);
+  // console.log("Image source:", imageSrc);
   return (
     <VStack
       borderWidth="1px"
@@ -19,9 +19,9 @@ const Card = ({ title, description, imageSrc }) => {
       backgroundColor="white"
     >
       <Box height="200px" width="100%">
-        <Image 
+        <Image
           src={imageSrc}
-          alt={title} 
+          alt={title}
           objectFit="cover"
           width="100%"
           height="100%"
