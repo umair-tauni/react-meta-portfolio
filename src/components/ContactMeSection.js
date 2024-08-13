@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useFormik } from "formik";
 import {
   Box,
@@ -25,47 +25,30 @@ const LandingSection = () => {
     initialValues: {
       firstName: "",
       email: "",
-      type: "hireMe", // Default value for the select field
+      type: "",
       comment: "",
     },
-    onSubmit: async (values) => {
-      try {
-        await submit(values); // Submit form values using the submit function from useSubmit
-        formik.resetForm(); // Reset the form after successful submission
-        onOpen(
-          "Success",
-          `Thank you ${values.firstName}, your message has been sent.`
-        );
-      } catch (error) {
-        onOpen("Error", "Failed to send your message.");
-      }
+    onSubmit: (values) => {
+      submit("https://somewhere-online.com/contactme", values);
     },
     validationSchema: Yup.object({
-      firstName: Yup.string()
-        .required("Name is required")
-        .min(2, "Name must be at least 2 characters long"),
-      email: Yup.string()
-        .required("Email is required")
-        .email("Invalid email address"),
-      type: Yup.string().required("Please select an enquiry type"),
+      firstName: Yup.string().required("Required"),
+      email: Yup.string().email("Invalid email address").required("Required"),
+      type: Yup.string().required("Required"),
       comment: Yup.string()
-        .required("Message is required")
-        .min(10, "Message must be at least 10 characters long"),
+        .min(10, "Must be at least 10 characters")
+        .required("Required"),
     }),
   });
 
   useEffect(() => {
     if (response) {
+      onOpen(response.type, response.message);
       if (response.type === "success") {
-        onOpen(
-          "Success",
-          `Thank you ${formik.values.firstName}, your message has been sent.`
-        );
-      } else {
-        onOpen("Error", `Failed to send your message. ${response.message}`);
+        formik.resetForm();
       }
     }
-  }, [response, onOpen, formik.values.firstName]);
+  }, [response, formik, onOpen]);
 
   return (
     <FullScreenSection
@@ -82,7 +65,7 @@ const LandingSection = () => {
           <form onSubmit={formik.handleSubmit}>
             <VStack spacing={4}>
               <FormControl
-                isInvalid={formik.touched.firstName && formik.errors.firstName}
+                isInvalid={formik.errors.firstName && formik.touched.firstName}
               >
                 <FormLabel htmlFor="firstName">Name</FormLabel>
                 <Input
@@ -93,7 +76,7 @@ const LandingSection = () => {
                 <FormErrorMessage>{formik.errors.firstName}</FormErrorMessage>
               </FormControl>
               <FormControl
-                isInvalid={formik.touched.email && formik.errors.email}
+                isInvalid={formik.errors.email && formik.touched.email}
               >
                 <FormLabel htmlFor="email">Email Address</FormLabel>
                 <Input
@@ -105,10 +88,13 @@ const LandingSection = () => {
                 <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
               </FormControl>
               <FormControl
-                isInvalid={formik.touched.type && formik.errors.type}
+                isInvalid={formik.errors.type && formik.touched.type}
               >
                 <FormLabel htmlFor="type">Type of enquiry</FormLabel>
                 <Select id="type" name="type" {...formik.getFieldProps("type")}>
+                  <option value="pleaseChoose">
+                    Please choose from the following ...
+                  </option>
                   <option value="hireMe">Freelance project proposal</option>
                   <option value="openSource">
                     Open source consultancy session
@@ -118,7 +104,7 @@ const LandingSection = () => {
                 <FormErrorMessage>{formik.errors.type}</FormErrorMessage>
               </FormControl>
               <FormControl
-                isInvalid={formik.touched.comment && formik.errors.comment}
+                isInvalid={formik.errors.comment && formik.touched.comment}
               >
                 <FormLabel htmlFor="comment">Your message</FormLabel>
                 <Textarea
@@ -127,13 +113,15 @@ const LandingSection = () => {
                   height={250}
                   {...formik.getFieldProps("comment")}
                 />
+
                 <FormErrorMessage>{formik.errors.comment}</FormErrorMessage>
               </FormControl>
               <Button
+                disabled={formik.isSubmitting}
+                isLoading={isLoading}
                 type="submit"
                 colorScheme="purple"
                 width="full"
-                isLoading={isLoading}
               >
                 Submit
               </Button>
