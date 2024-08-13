@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -12,7 +12,7 @@ import { Box, HStack } from "@chakra-ui/react";
 const socials = [
   {
     icon: faEnvelope,
-    url: "mailto: hello@example.com",
+    url: "mailto:hello@example.com",
   },
   {
     icon: faGithub,
@@ -33,16 +33,32 @@ const socials = [
 ];
 
 const Header = () => {
-  const handleClick = (anchor) => () => {
-    const id = `${anchor}-section`;
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+  const [showHeader, setShowHeader] = useState(true);
+  const prevScrollY = useRef(0);
+
+  const handleScroll = () => {
+    const currentScrollY = window.scrollY;
+
+    // Show header when scrolling up, hide when scrolling down
+    if (currentScrollY > prevScrollY.current) {
+      setShowHeader(false); // Scrolling down
+    } else {
+      setShowHeader(true); // Scrolling up
     }
+
+    // Update the previous scroll position
+    prevScrollY.current = currentScrollY;
   };
+
+  useEffect(() => {
+    // Add scroll event listener
+    window.addEventListener("scroll", handleScroll);
+
+    // Cleanup on component unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <Box
@@ -50,11 +66,12 @@ const Header = () => {
       top={0}
       left={0}
       right={0}
-      translateY={0}
+      transform={showHeader ? "translateY(0)" : "translateY(-200px)"}
       transitionProperty="transform"
       transitionDuration=".3s"
       transitionTimingFunction="ease-in-out"
       backgroundColor="#18181b"
+      zIndex={1000} // Ensure the header is above other content
     >
       <Box color="white" maxWidth="1280px" margin="0 auto">
         <HStack
@@ -64,8 +81,7 @@ const Header = () => {
           alignItems="center"
         >
           <nav>
-            {/* Add social media links based on the `socials` data */}
-            <HStack spacing={4}>
+            <HStack spacing={6}>
               {socials.map((social, index) => (
                 <a
                   key={index}
@@ -80,19 +96,8 @@ const Header = () => {
           </nav>
           <nav>
             <HStack spacing={8}>
-              {/* Add links to Projects and Contact me section */}
-              <a
-                href="#projects-section"
-                onClick={(e) => handleClick(e, 'projects-section')}
-              >
-                Projects
-              </a>
-              <a
-                href="#contactme-section"
-                onClick={(e) => handleClick(e, 'contactme-section')}
-              >
-                Contact Me
-              </a>
+              <a href="#projects-section">Projects</a>
+              <a href="#contactme-section">Contact Me</a>
             </HStack>
           </nav>
         </HStack>
@@ -100,4 +105,5 @@ const Header = () => {
     </Box>
   );
 };
+
 export default Header;
