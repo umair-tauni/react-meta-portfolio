@@ -35,7 +35,7 @@ const Card = ({ title, description, imageSrc }) => {
         <Text color="gray.600">{description}</Text>
         <HStack spacing={2}>
           <Text color="blue.600" fontWeight="semibold">
-            Learn more
+            See more
           </Text>
           <FontAwesomeIcon icon={faArrowRight} size="1x" color="#3182CE" />
         </HStack>
