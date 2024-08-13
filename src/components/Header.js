@@ -16,11 +16,11 @@ const socials = [
   },
   {
     icon: faGithub,
-    url: "https://github.com",
+    url: "https://github.com/umair-tauni",
   },
   {
     icon: faLinkedin,
-    url: "https://www.linkedin.com",
+    url: "https://www.linkedin.com/in/umair-tauni",
   },
   {
     icon: faMedium,
